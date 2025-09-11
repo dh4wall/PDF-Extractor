@@ -1,0 +1,21 @@
+{
+  "name": "flowbit_assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/compression": "^1.8.1",
+    "@types/pdfjs-dist": "^2.10.377",
+    "turbo": "^2.5.6"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^5.4.149"
+  }
+}
