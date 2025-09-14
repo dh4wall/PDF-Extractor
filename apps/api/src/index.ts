@@ -13,7 +13,7 @@ import invoiceRoutes from './routes/invoices';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 3001; // Good practice to have a fallback for local dev
 
 // Rate limiting
 const limiter = rateLimit({
@@ -26,17 +26,18 @@ app.use(limiter);
 app.use(helmet());
 app.use(compression());
 app.use(morgan('combined'));
-app.use(cors({
-  origin: process.env.FRONTEND_URL ,
-  credentials: true
-}));
+
+// --- TEMPORARY DEBUGGING STEP ---
+// Allow all origins to see if CORS is the issue.
+// Your original code was: app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+app.use(cors());
+
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-
-
-
+// --- FIX 1: ADD A ROOT ROUTE ---
+// Vercel needs this to know what to do when someone visits the base URL.
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the API! Use /health to check status.' });
 });
@@ -63,6 +64,8 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
+// --- FIX 2: ONLY LISTEN LOCALLY ---
+// Vercel handles the listening part in production.
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`🚀 API Server running on port ${PORT}`);
@@ -70,3 +73,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export default app;
+
